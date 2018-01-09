@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\Permission.cs" />
+    <Compile Include="DAO\Role.cs" />
+    <Compile Include="DAO\User.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IReferenceEntity.cs" />
