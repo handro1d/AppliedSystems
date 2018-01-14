@@ -1047,10 +1047,9 @@
     <Content Include="Views\Policy\Apply.cshtml" />
     <Content Include="Views\Policy\_policyDriver.cshtml" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Views\Error\Internal.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Error\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
