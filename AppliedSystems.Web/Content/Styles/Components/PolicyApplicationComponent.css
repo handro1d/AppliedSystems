@@ -1,0 +1,50 @@
+﻿#policy_application-card .card-title {
+    text-align: center;
+    width: 100%;
+}
+
+#policy_application-card .input_control-input,
+#policy_application-card .input_control-dateInput,
+#policy_application-card .input_control-select {
+    height: 40px;
+}
+
+#policy_application-card .month,
+#policy_application-card .year{
+    margin-left: 16px;
+}
+
+#policy_application-card  .input_control-children {
+    margin-top: 16px;
+    display: inline-block;
+}
+
+#policy_application-card .card-actions {
+    margin-top: 16px;
+    float: right;
+}
+
+#policy_application-card .card-actions a {
+    float: left;
+    margin-top: 10px;
+}
+
+#policy_application-card .card-actions button {
+    height: 39px;
+    line-height: 2em;
+    padding: 0 25px;
+    font-size: 16px;
+    margin-left: 16px;
+}
+
+#policy_application-card .driverClaim {
+    margin-bottom: 16px;
+}
+
+.policy_application_driver-add_claim {
+    float: left;
+    height: 39px;
+    line-height: 2em;
+    font-size: 16px;
+    display: inline-block;
+}

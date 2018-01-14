@@ -1,0 +1,29 @@
+﻿<div id="policy_application-card" class="card large">
+    <div id="policy_application-card_content" class="card-content">
+        <h2 class="card-title">Policy Application</h2>
+        
+        <div class="card-validation" ng-show="$ctrl.errorMessage">
+            <p class="validation-error" ng-bind-html="$ctrl.errorMessage"></p>
+        </div>
+
+        <as-date-input input-id="policy_application-startDate"
+                       label="Start Date"
+                       property-name="startDate"
+                       on-value-change="$ctrl.updateValue(propertyName, newValue)"/>
+        
+        <div ng-repeat="driver in $ctrl.drivers track by $index">
+            <as-policy-application-driver driver-number="$index +1"
+                                          driver="driver"
+                                          occupations="$ctrl.occupations"/>
+        </div>
+        
+        <br/>
+        
+        <div class="card-actions">
+            <button id="policy_application-add_driver" ng-click="$ctrl.addDriver()">Add Driver</button>
+            <button id="policy_application-apply" ng-click="$ctrl.apply()">Apply</button>
+        </div>
+        
+
+    </div>
+</div>

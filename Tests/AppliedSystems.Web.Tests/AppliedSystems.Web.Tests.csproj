@@ -113,8 +113,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\AccountControllerBuilder.cs" />
+    <Compile Include="Builders\PolicyControllerBuilder.cs" />
     <Compile Include="Controllers\AccountControllerFixture.cs" />
+    <Compile Include="Controllers\PolicyControllerFixture.cs" />
     <Compile Include="Fakes\FakeAuthenticationManager.cs" />
+    <Compile Include="Fakes\FakePolicyService.cs" />
+    <Compile Include="Fakes\FakeReferenceService.cs" />
     <Compile Include="Mocks\MockIdentity.cs" />
     <Compile Include="Mocks\MockSignInManager.cs" />
     <Compile Include="Mocks\MockUserManager.cs" />

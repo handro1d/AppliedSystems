@@ -51,5 +51,13 @@ namespace AppliedSystems.Services
 
             return await base.CreateAsync(user);
         }
+
+        protected override Task<bool> VerifyPasswordAsync(IUserPasswordStore<User, int> store, User user, string password)
+        {
+            _passwordHasher.Salt = user.PasswordSalt;
+            var result = _passwordHasher.VerifyHashedPassword(user.PasswordHash, password);
+
+            return Task.FromResult(result == PasswordVerificationResult.Success);
+        }
     }
 }

@@ -1,0 +1,27 @@
+﻿<div id="login-card" class="card">
+    <form id="login-card_content" name="loginForm" class="card-content" ng-submit="$ctrl.login()">
+        <h2 class="card-title">Sign In</h2>
+
+        <div class="card-validation" ng-show="$ctrl.error">
+            <p class="validation-error">{{$ctrl.error}}</p>
+        </div>
+
+        <as-input input-Id="login-username"
+                  label="Email"
+                  value="{{$ctrl.username}}"
+                  property-name="username"
+                  on-value-change="$ctrl.updateValue(propertyName, newValue)"/>
+        
+        <as-input input-id="login-password"
+                  label="Password"
+                  input-type="password"
+                  value="{{$ctrl.password}}"
+                  property-Name="password"
+                  on-value-change="$ctrl.updateValue(propertyName, newValue)"/>
+
+        <div class="card-actions">
+            <a id="login-registration" ng-href="{{$ctrl.registrationUrl}}" ng-show="$ctrl.registrationUrl">Register</a>
+            <button type="submit" id="login-submit" class="primary button">Sign In</button>
+        </div>
+    </form>
+</div>

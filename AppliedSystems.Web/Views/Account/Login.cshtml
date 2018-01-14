@@ -5,7 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Login</h2>
+@section Styles
+{
+    @Styles.Render("~/Content/Styles/Components/LoginComponent.css")
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/AngularJs/Components/as.login.js")
+}
+
+@{
+    var returnUrl = !string.IsNullOrEmpty(ViewBag.ReturnUrl) || !Url.IsLocalUrl(ViewBag.ReturnUrl) ? Url.Action("Index", "Home") : ViewBag.ReturnUrl;
+}
+
+@*<h2>Login</h2>*@
+
+<div ng-controller="AccountController">
+    <as-login on-login="login(username, password, returnUrl)"
+              error="{{errormessage}}"
+              return-url="@returnUrl"
+              registration-url="@Url.Action("Register", "Account")" />
+</div>
+
+
+
+
+
+@*<h2>Login</h2>
 
 @using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
 {
@@ -29,4 +56,4 @@
             </td>
         </tr>
     </table>
-}
+}*@

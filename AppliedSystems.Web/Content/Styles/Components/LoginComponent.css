@@ -1,0 +1,21 @@
+﻿#login-card .card-title {
+    text-align: center;
+    width: 100%;
+}
+
+#login-card .input_control-input {
+    height: 40px;
+}
+
+#login-card .card-actions a {
+    float: left;
+    margin-top: 10px;
+}
+
+#login-card .card-actions button {
+    float: right;
+    height: 39px;
+    line-height: 2em;
+    padding: 0 25px;
+    font-size: 16px;
+}

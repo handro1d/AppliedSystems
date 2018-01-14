@@ -1,0 +1,62 @@
+﻿@using AppliedSystems.Web.Models
+@model AppliedSystems.Web.Models.PolicyApplicationViewModel
+
+@{
+    ViewBag.Title = "Apply";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/AngularJs/Controllers/policy.controller.js")
+    @Scripts.Render("~/AngularJs/Components/as.policy.application.js")
+    @Scripts.Render("~/AngularJs/Components/as.policy.application.driver.js")
+    @Scripts.Render("~/AngularJs/Components/as.policy.application.driver.claim.js")
+}
+
+@section Styles
+{
+    @Styles.Render("~/Content/Styles/Components/PolicyApplicationComponent.css")
+}
+
+<div ng-controller="PolicyController">
+    <as-policy-application occupations="@Json.Encode(Model.Occupations.ToArray())"
+                           on-application="apply(policyDetails, returnUrl)"
+                           error-message="errormessage"/>
+</div>
+
+@*<as-policy-application occupations="@Json.Encode(Model.Occupations.ToArray())"
+                       on-application=""/>*@
+
+@*<h2>Apply</h2>
+
+@using (Html.BeginForm("Apply", "Policy", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="input-control">
+        @Html.LabelFor(model => model.StartDate)
+        @Html.TextBoxFor(model => model.StartDate, new { type = "date" })
+        @Html.ValidationMessageFor(model => model.StartDate)
+    </div>
+
+    <h3>Drivers</h3>
+
+    <div id="drivers">
+        @for(var driverIndex = 0; driverIndex < Model.Drivers.Count; driverIndex++)
+        {
+            var driver = Model.Drivers[driverIndex];
+        }
+
+
+
+
+        @foreach (var driver in Model.Drivers)
+        {
+            Html.RenderPartial("_policyDriver", driver);
+        }
+    </div>
+
+    <button type="submit">Apply</button>
+}*@

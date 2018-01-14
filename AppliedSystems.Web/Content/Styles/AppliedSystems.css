@@ -1,0 +1,97 @@
+﻿body {
+    width: 100%;
+    background-color: #F4F4F4;
+    margin-left: 0;
+    font-family: 'PT Sans', sans-serif;
+}
+
+header {
+    background-color: white;
+    font-family: 'PT Sans', sans-serif;
+}
+
+header img {
+    width: auto;
+    height: auto;
+    max-width: 100px;
+}
+
+.header-main {
+    width: 100%;
+    display: inline-block;
+    width: 100%;
+}
+
+header a {
+    color: white;
+    padding-left: 16px;
+}
+
+.header-main a {
+    float: left;
+}
+
+.header-main h1 {
+    float: left;
+}
+
+nav {
+    width: 100%;
+    background-color: #04b5ea;
+    color: white;
+    display: inline-block;
+}
+
+nav ul li {
+    display: inline;
+}
+
+a {
+    color: #04b5ea;
+    cursor: pointer;
+}
+
+.body-content {
+    padding-top: 16px;
+}
+
+.button.primary {
+    background-color: #04b5ea;
+    color: #FFF;
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    border-right: 1px solid #0491BC;
+    border-bottom: 2px solid #0491BC;
+    border-left: 1px solid #0491BC;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    margin-top: 16px;
+    transition: 0.4s;
+    background-image: url(../Images/down_arrow.png);
+    background-size: 5%;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.accordionPanel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+}
+
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+
+.nav {
+    width: 100%;
+    background-color: #04B5EA;
+}

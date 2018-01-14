@@ -1,0 +1,6 @@
+﻿<div class="input-control">
+    <div class="input_control-children">
+        <label class="input_control-label" for="{{$ctrl.inputId}}">{{$ctrl.label}}</label>
+        <select class="input_control-select" ng-model="$ctrl.selectedItem" ng-options="x.Text for x in $ctrl.items" ng-change="$ctrl.valueChanged()"></select>
+    </div>
+</div>

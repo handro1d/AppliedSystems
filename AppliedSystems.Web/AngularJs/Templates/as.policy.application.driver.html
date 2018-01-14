@@ -1,0 +1,40 @@
+﻿<button class="driver accordion" ng-click="$ctrl.displayAccordion($event)">    
+    Driver {{$ctrl.driverNumber}}
+</button>
+<div class="accordionPanel">
+    <as-input input-Id="policy_application_driver-firstname-{{$ctrl.driverNumber}}"
+              label="First Name"
+              property-name="firstName"
+              on-value-change="$ctrl.updateValue(propertyName, newValue)" />
+
+    <as-input input-Id="policy_application_driver-surname-{{$ctrl.driverNumber}}"
+              label="Surname"
+              property-name="surname"
+              on-value-change="$ctrl.updateValue(propertyName, newValue)" />
+
+    <as-select input-id="policy_application_driver-occupation-{{$ctrl.driverNumber}}"
+               label="Occupation"
+               items="$ctrl.occupations"
+               property-name="occupationId"
+               on-value-change="$ctrl.updateValue(propertyName, newValue)" />
+
+    <as-date-input input-id="policy_application_driver-dateOfBirth-{{$ctrl.driverNumber}}"
+                   label="Date of Birth"
+                   property-name="dateOfBirth"
+                   on-value-change="$ctrl.updateValue(propertyName, newValue)" />
+    
+    <button class="driverClaim accordion" 
+            ng-click="$ctrl.displayAccordion($event)" 
+            ng-hide="$ctrl.driver.claims == null || $ctrl.driver.claims.length == 0">Claims</button>
+
+    <div class="accordionPanel">
+        <div ng-repeat="claim in $ctrl.driver.claims track by $index">
+            <as-policy-application-driver-claim claim-number="$index"
+                                                claim="claim"/>
+        </div>
+    </div>
+    
+    <br/>
+    <button class="policy_application_driver-add_claim" ng-click="$ctrl.addClaim()">Add Claim</button>
+
+</div>

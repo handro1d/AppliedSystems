@@ -1,252 +1,261 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using AppliedSystems.Common.Exceptions;
 using AppliedSystems.Domain;
 using AppliedSystems.Interfaces;
+using Polly;
+using Polly.Retry;
 
 namespace AppliedSystems.Repository
 {
-    public class AppliedSystemsRepository<TEntity> /*: IAppliedSystemsRepository<TEntity>*/ where TEntity : IEntity
+    [ExcludeFromCodeCoverage]
+    public class AppliedSystemsRepository<TEntity> : IAppliedSystemsRepository<TEntity> where TEntity : class, IEntity
     {
-        //protected readonly NIPFContext Context;
-        //protected readonly IAppSettings AppSettings;
-        //protected readonly RetryPolicy RetryPolicy;
-        //protected readonly RetryPolicy AsyncRetryPolicy;
+        protected readonly AppliedSystemsContext Context;
+        protected readonly IAppSettings AppSettings;
+        protected readonly RetryPolicy RetryPolicy;
+        protected readonly RetryPolicy AsyncRetryPolicy;
 
-        //public BaseNipfRepository(NIPFContext context, IAppSettings appSettings, ISqlExceptionRetryPolicy sqlExceptionRetryPolicy)
-        //{
-        //    if (context == null)
-        //    {
-        //        throw new ArgumentNullException("context");
-        //    }
+        public AppliedSystemsRepository(
+            AppliedSystemsContext context, 
+            IAppSettings appSettings, 
+            ISqlExceptionRetryPolicy sqlExceptionRetryPolicy)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
-        //    if (appSettings == null)
-        //    {
-        //        throw new ArgumentNullException("appSettings");
-        //    }
+            if (appSettings == null)
+            {
+                throw new ArgumentNullException("appSettings");
+            }
 
-        //    if (sqlExceptionRetryPolicy == null)
-        //    {
-        //        throw new ArgumentNullException("sqlExceptionRetryPolicy");
-        //    }
+            if (sqlExceptionRetryPolicy == null)
+            {
+                throw new ArgumentNullException("sqlExceptionRetryPolicy");
+            }
 
-        //    AppSettings = appSettings;
-        //    Context = context;
+            AppSettings = appSettings;
+            Context = context;
 
-        //    Context.Database.CommandTimeout = 120;
+            Context.Database.CommandTimeout = 120;
 
-        //    RetryPolicy = Policy
-        //        .Handle<SqlException>(sqlExceptionRetryPolicy.IsTransientException)
-        //        .Retry(appSettings.SqlExceptionRetryCount, (exception, retryCount) =>
-        //        {
-        //            // TODO: Log the exception and we are retrying - event log?
-        //        });
+            RetryPolicy = Policy
+                .Handle<SqlException>(sqlExceptionRetryPolicy.IsTransientException)
+                .Retry(appSettings.SqlExceptionRetryCount, (exception, retryCount) =>
+                {
+                    // TODO: Log the exception and saywe are retrying - event log?
+                });
 
-        //    AsyncRetryPolicy = Policy
-        //        .Handle<SqlException>(sqlExceptionRetryPolicy.IsTransientException)
-        //        .RetryAsync(appSettings.SqlExceptionRetryCount, (exception, retryCount) =>
-        //        {
-        //            // TODO: Log the exception and we are retrying - event log?
-        //        });
-        //}
+            AsyncRetryPolicy = Policy
+                .Handle<SqlException>(sqlExceptionRetryPolicy.IsTransientException)
+                .RetryAsync(appSettings.SqlExceptionRetryCount, (exception, retryCount) =>
+                {
+                    // TODO: Log the exception and say we are retrying - event log?
+                });
+        }
 
-        //public ICollection<TEntity> GetAll()
-        //{
-        //    return RetryPolicy.Execute(() => Context.Set<TEntity>().ToList());
-        //}
+        public ICollection<TEntity> GetAll()
+        {
+            return RetryPolicy.Execute(() => Context.Set<TEntity>().ToList());
+        }
 
-        //public async Task<ICollection<TEntity>> GetAllAsync()
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(() => Context.Set<TEntity>().ToListAsync());
-        //}
+        public async Task<ICollection<TEntity>> GetAllAsync()
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(() => Context.Set<TEntity>().ToListAsync());
+        }
 
-        //public TEntity Get(int id)
-        //{
-        //    return RetryPolicy.Execute(() => Context.Set<TEntity>().Find(id));
-        //}
+        public TEntity Get(int id)
+        {
+            return RetryPolicy.Execute(() => Context.Set<TEntity>().Find(id));
+        }
 
-        //public async Task<TEntity> GetAsync(int id)
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.Set<TEntity>().FindAsync(id));
-        //}
+        public async Task<TEntity> GetAsync(int id)
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.Set<TEntity>().FindAsync(id));
+        }
 
-        //public TEntity Find(Expression<Func<TEntity, bool>> match)
-        //{
-        //    return RetryPolicy.Execute(() => Context.Set<TEntity>().FirstOrDefault(match));
-        //}
+        public TEntity Find(Expression<Func<TEntity, bool>> match)
+        {
+            return RetryPolicy.Execute(() => Context.Set<TEntity>().FirstOrDefault(match));
+        }
 
-        //public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match)
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.Set<TEntity>().SingleOrDefaultAsync(match));
-        //}
+        public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> match)
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.Set<TEntity>().SingleOrDefaultAsync(match));
+        }
 
-        //public ICollection<TEntity> FindAll(Expression<Func<TEntity, bool>> match)
-        //{
-        //    return RetryPolicy.Execute(() => Context.Set<TEntity>().Where(match.Compile()).ToList());
-        //}
+        public ICollection<TEntity> FindAll(Expression<Func<TEntity, bool>> match)
+        {
+            return RetryPolicy.Execute(() => Context.Set<TEntity>().Where(match.Compile()).ToList());
+        }
 
-        //public async Task<ICollection<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> match)
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(() => Task.FromResult(Context.Set<TEntity>().Where(match.Compile()).ToList()));
-        //}
+        public async Task<ICollection<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> match)
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(() => Task.FromResult(Context.Set<TEntity>().Where(match.Compile()).ToList()));
+        }
 
-        //public TEntity Add(TEntity t)
-        //{
-        //    return RetryPolicy.Execute(() =>
-        //    {
-        //        Context.Set<TEntity>().Add(t);
-        //        SaveChanges();
-        //        return t;
-        //    });
-        //}
+        public virtual TEntity Add(TEntity t)
+        {
+            return RetryPolicy.Execute(() =>
+            {
+                Context.Set<TEntity>().Add(t);
+                SaveChanges();
+                t = Context.Set<TEntity>().Attach(t);
+                return t;
+            });
+        }
 
-        //public async Task<TEntity> AddAsync(TEntity t)
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(async () =>
-        //    {
-        //        Context.Set<TEntity>().Add(t);
-        //        await SaveChangesAsync();
-        //        return t;
-        //    });
-        //}
+        public async Task<TEntity> AddAsync(TEntity t)
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(async () =>
+            {
+                Context.Set<TEntity>().Add(t);
+                await SaveChangesAsync();
+                return t;
+            });
+        }
 
-        //public TEntity Update(TEntity updatedEntity, int key)
-        //{
-        //    if (updatedEntity == null)
-        //    {
-        //        throw new ArgumentNullException("updatedEntity");
-        //    }
+        public TEntity Update(TEntity updatedEntity, int key)
+        {
+            if (updatedEntity == null)
+            {
+                throw new ArgumentNullException("updatedEntity");
+            }
 
-        //    TEntity existingEntity = RetryPolicy.Execute(() => Context.Set<TEntity>().Find(key));
+            TEntity existingEntity = RetryPolicy.Execute(() => Context.Set<TEntity>().Find(key));
 
-        //    if (existingEntity == null)
-        //    {
-        //        throw new EntityNotFoundException<TEntity>(updatedEntity);
-        //    }
+            if (existingEntity == null)
+            {
+                throw new EntityNotFoundException<TEntity>(updatedEntity);
+            }
 
-        //    try
-        //    {
-        //        RetryPolicy.Execute(() =>
-        //        {
-        //            Context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
-        //            SaveChanges();
-        //        });
-        //    }
-        //    catch (DbUpdateConcurrencyException concurrencyException)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Update, concurrencyException);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Update, exception);
-        //    }
+            try
+            {
+                RetryPolicy.Execute(() =>
+                {
+                    Context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
+                    SaveChanges();
+                });
+            }
+            catch (DbUpdateConcurrencyException concurrencyException)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Update, concurrencyException);
+            }
+            catch (Exception exception)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Update, exception);
+            }
 
-        //    return existingEntity;
-        //}
+            return existingEntity;
+        }
 
-        //public async Task<TEntity> UpdateAsync(TEntity updatedEntity, int key)
-        //{
-        //    if (updatedEntity == null)
-        //    {
-        //        throw new ArgumentNullException("updatedEntity");
-        //    }
+        public async Task<TEntity> UpdateAsync(TEntity updatedEntity, int key)
+        {
+            if (updatedEntity == null)
+            {
+                throw new ArgumentNullException("updatedEntity");
+            }
 
-        //    TEntity existingEntity = await Context.Set<TEntity>().FindAsync(key);
+            TEntity existingEntity = await Context.Set<TEntity>().FindAsync(key);
 
-        //    if (existingEntity == null)
-        //    {
-        //        throw new EntityNotFoundException<TEntity>(updatedEntity);
-        //    }
+            if (existingEntity == null)
+            {
+                throw new EntityNotFoundException<TEntity>(updatedEntity);
+            }
 
-        //    try
-        //    {
-        //        await AsyncRetryPolicy.ExecuteAsync(async () =>
-        //        {
-        //            Context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
-        //            await SaveChangesAsync();
-        //        });
-        //    }
-        //    catch (DbUpdateConcurrencyException concurrencyException)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Update, concurrencyException);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Update, exception);
-        //    }
+            try
+            {
+                await AsyncRetryPolicy.ExecuteAsync(async () =>
+                {
+                    Context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
+                    await SaveChangesAsync();
+                });
+            }
+            catch (DbUpdateConcurrencyException concurrencyException)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Update, concurrencyException);
+            }
+            catch (Exception exception)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Update, exception);
+            }
 
-        //    return existingEntity;
-        //}
+            return existingEntity;
+        }
 
-        //public void Delete(TEntity t)
-        //{
-        //    try
-        //    {
-        //        RetryPolicy.Execute(() =>
-        //        {
-        //            Context.Set<TEntity>().Remove(t);
-        //            SaveChanges();
-        //        });
-        //    }
-        //    catch (DBConcurrencyException concurrencyException)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Delete, concurrencyException);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Delete, exception);
-        //    }
-        //}
+        public void Delete(TEntity t)
+        {
+            try
+            {
+                RetryPolicy.Execute(() =>
+                {
+                    Context.Set<TEntity>().Remove(t);
+                    SaveChanges();
+                });
+            }
+            catch (DBConcurrencyException concurrencyException)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Delete, concurrencyException);
+            }
+            catch (Exception exception)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Delete, exception);
+            }
+        }
 
-        //public async Task<int> DeleteAsync(TEntity t)
-        //{
-        //    try
-        //    {
-        //        return await AsyncRetryPolicy.ExecuteAsync(async () =>
-        //        {
-        //            Context.Set<TEntity>().Remove(t);
-        //            return await SaveChangesAsync();
-        //        });
-        //    }
-        //    catch (DBConcurrencyException concurrencyException)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Delete, concurrencyException);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new RepositoryException(RepositoryExceptionType.Delete, exception);
-        //    }
-        //}
+        public async Task<int> DeleteAsync(TEntity t)
+        {
+            try
+            {
+                return await AsyncRetryPolicy.ExecuteAsync(async () =>
+                {
+                    Context.Set<TEntity>().Remove(t);
+                    return await SaveChangesAsync();
+                });
+            }
+            catch (DBConcurrencyException concurrencyException)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Delete, concurrencyException);
+            }
+            catch (Exception exception)
+            {
+                throw new RepositoryException(RepositoryExceptionType.Delete, exception);
+            }
+        }
 
-        //public int Count()
-        //{
-        //    return RetryPolicy.Execute(() => Context.Set<TEntity>().Count());
-        //}
+        public int Count()
+        {
+            return RetryPolicy.Execute(() => Context.Set<TEntity>().Count());
+        }
 
-        //public async Task<int> CountAsync()
-        //{
-        //    return await AsyncRetryPolicy.ExecuteAsync(() => Context.Set<TEntity>().CountAsync());
-        //}
+        public async Task<int> CountAsync()
+        {
+            return await AsyncRetryPolicy.ExecuteAsync(() => Context.Set<TEntity>().CountAsync());
+        }
 
-        //protected int SaveChanges()
-        //{
-        //    return AppSettings.AutoSaveChanges ? RetryPolicy.Execute(() => Context.SaveChanges()) : 0;
-        //}
+        protected int SaveChanges()
+        {
+            return AppSettings.AutoSaveChanges ? RetryPolicy.Execute(() => Context.SaveChanges()) : 0;
+        }
 
-        //protected async Task<int> SaveChangesAsync()
-        //{
-        //    if (AppSettings.AutoSaveChanges)
-        //    {
-        //        return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.SaveChangesAsync());
-        //    }
+        protected async Task<int> SaveChangesAsync()
+        {
+            if (AppSettings.AutoSaveChanges)
+            {
+                return await AsyncRetryPolicy.ExecuteAsync(async () => await Context.SaveChangesAsync());
+            }
 
-        //    return 0;
-        //}
+            return 0;
+        }
     }
 }

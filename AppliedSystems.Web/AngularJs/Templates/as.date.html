@@ -1,0 +1,10 @@
+﻿<div class="input-control">
+    <div class="input_control-children">
+        <label class="input_control-label" for="{{$ctrl.inputId}}-date">{{$ctrl.label}}</label>
+        <div id="{{$ctrl.inputId}}-date">
+            <input type="number" id="{{$ctrl.inputId}}-day" class="input_control-dateInput day" placeholder="dd" ng-model="$ctrl.day" ng-change="$ctrl.valueChanged()"/>
+            <input type="number" id="{{$ctrl.inputId}}-month" class="input_control-dateInput month" placeholder="MM" ng-model="$ctrl.month" ng-change="$ctrl.valueChanged()"/>
+            <input type="number" id="{{$ctrl.inputId}}-year" class="input_control-dateInput year" placeholder="YYYY" ng-model="$ctrl.year" ng-change="$ctrl.valueChanged()"/>
+        </div>
+    </div>
+</div>

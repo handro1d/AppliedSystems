@@ -31,10 +31,12 @@ namespace AppliedSystems.Domain.DAO
 
         // Navigation Properties
         public ICollection<Role> Roles { get; set; }
+        public ICollection<InsurancePolicy> Policies { get; set; }
 
         public User()
         {
             Roles = new HashSet<Role>();
+            Policies = new HashSet<InsurancePolicy>();
         }
     }
 }

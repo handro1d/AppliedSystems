@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -44,16 +50,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\DriverClaim.cs" />
+    <Compile Include="DAO\InsurancePolicy.cs" />
+    <Compile Include="DAO\InsurancePolicyDriver.cs" />
     <Compile Include="DAO\Permission.cs" />
+    <Compile Include="DAO\References\RefOccupation.cs" />
     <Compile Include="DAO\Role.cs" />
     <Compile Include="DAO\User.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IReferenceEntity.cs" />
+    <Compile Include="Occupation.cs" />
+    <Compile Include="PolicyValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppliedSystems.Common\AppliedSystems.Common.csproj">
+      <Project>{1C54C77E-099C-45CB-A95F-92F045F844EA}</Project>
+      <Name>AppliedSystems.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

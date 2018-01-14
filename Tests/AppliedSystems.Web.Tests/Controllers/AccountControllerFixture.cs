@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Web.Mvc;
 using AppliedSystems.Domain.DAO;
@@ -133,13 +134,7 @@ namespace AppliedSystems.Web.Tests
             ActionResult result = controller.Login(request).Result;
 
             // Verify result
-            result.AssertIsView("Login");
-            Assert.IsFalse(controller.ModelState.IsValid);
-
-            var erroroMessages = controller.ModelState[string.Empty].Errors.SelectMany(
-                modelError => new[] {modelError.ErrorMessage.ToString()}).ToList();
-
-            erroroMessages.AssertCollectionContainsItems("Username or password was incorrect");
+            result.AssertIsStatus(HttpStatusCode.Forbidden);
         }
 
         [Test]
@@ -156,7 +151,7 @@ namespace AppliedSystems.Web.Tests
                 .Login(request).Result;
 
             // Verify result
-            result.AssertIsRedirect("Home", "Index");
+            result.AssertIsStatus(HttpStatusCode.OK);
         }
 
         #endregion
@@ -237,8 +232,11 @@ namespace AppliedSystems.Web.Tests
             var userStore = new FakeUserStore()
                 .WithAbilityToCreateUser().Build();
 
-            var passwordHasher = new FakePasswordHasher().Build();
-            var userManager = new MockUserManager(userStore.Object, passwordHasher.Object);
+            var passwordHasher = new FakePasswordHasher()
+                .WithResult(PasswordVerificationResult.Success).Build();
+
+            var userManager = new MockUserManager(userStore.Object, passwordHasher.Object)
+                .WithUserCreationResult(IdentityResult.Success);
 
             // Call register
             var result = _controller
@@ -246,10 +244,7 @@ namespace AppliedSystems.Web.Tests
                 .Register(request).Result;
 
             // Verify result
-            userStore.Verify(
-                u => u.CreateAsync(It.Is<User>(user =>
-                    user.Email == request.Email
-                    && user.UserName == request.Email)), Times.Once);
+            result.AssertIsRedirect("Home", "Index");
         }
 
         [Test]

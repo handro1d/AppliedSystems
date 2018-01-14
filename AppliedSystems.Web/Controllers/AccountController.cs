@@ -64,7 +64,7 @@ namespace AppliedSystems.Web.Controllers
         }
 
         [Route("~/Login")]
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             if (!ModelState.IsValid)
@@ -76,14 +76,9 @@ namespace AppliedSystems.Web.Controllers
             // Try to sign in user with provided details
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
-            if (result == SignInStatus.Success)
-            {
-                return RedirectToReturnUrl(returnUrl);
-            }
-
-            // User could not be signed in - return view
-            ModelState.AddModelError(string.Empty, @"Username or password was incorrect");
-            return View("Login", model);
+            return result == SignInStatus.Success
+                ? new HttpStatusCodeResult(HttpStatusCode.OK)
+                : new HttpStatusCodeResult(HttpStatusCode.Forbidden);
         }
 
         [Route("Register")]

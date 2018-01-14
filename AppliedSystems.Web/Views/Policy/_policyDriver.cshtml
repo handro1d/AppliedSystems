@@ -1,0 +1,16 @@
+﻿@model AppliedSystems.Web.Models.PolicyApplicationDriverViewModel
+    
+<h2>Driver @Model.Index</h2>
+<div>
+    @Html.LabelFor(model => model.FirstName)
+    @Html.TextBoxFor(model => model.FirstName)
+    @Html.ValidationMessageFor(model => model.FirstName)
+</div>
+<div>
+    @Html.LabelFor(model => model.Surname)
+    @Html.TextBoxFor(model => model.Surname)
+    @Html.ValidationMessageFor(model => model.Surname)
+</div>
+
+
+

@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace AppliedSystems.Web
 {
@@ -7,7 +6,8 @@ namespace AppliedSystems.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new HandleAppliedSystemsErrorAttribute("AppliedSystems.Web"));
+            filters.Add(new AuthorizeAttribute());
         }
     }
 }

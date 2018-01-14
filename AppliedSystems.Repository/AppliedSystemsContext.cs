@@ -12,6 +12,7 @@ namespace AppliedSystems.Repository
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<InsurancePolicy> Policies { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
